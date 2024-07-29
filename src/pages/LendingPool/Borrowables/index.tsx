@@ -1,9 +1,10 @@
+'use client';
 
 import { useParams } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import {
-  useErrorHandler,
+  useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import clsx from 'clsx';
@@ -73,6 +74,7 @@ const getRewardSpeed = (
 };
 
 const Borrowables = (): JSX.Element => {
+  const { showBoundary } = useErrorBoundary();
   const {
     [PARAMETERS.CHAIN_ID]: selectedChainIDParam,
     [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: selectedUniswapV2PairAddress
@@ -88,14 +90,14 @@ const Borrowables = (): JSX.Element => {
     },
     error: farmingPoolAddressesError
   } = useFarmingPoolAddresses(selectedChainID, selectedUniswapV2PairAddress, library);
-  useErrorHandler(farmingPoolAddressesError);
+  showBoundary(farmingPoolAddressesError);
 
   const {
     isLoading: selectedLendingPoolLoading,
     data: selectedLendingPool,
     error: selectedLendingPoolError
   } = useLendingPool(selectedUniswapV2PairAddress, selectedChainID);
-  useErrorHandler(selectedLendingPoolError);
+  showBoundary(selectedLendingPoolError);
 
   const imxAddress = IMX_ADDRESSES[selectedChainID];
   const wETHAddress = W_ETH_ADDRESSES[selectedChainID];
@@ -106,7 +108,7 @@ const Borrowables = (): JSX.Element => {
     data: imxLendingPool,
     error: imxLendingPoolError
   } = useLendingPool(imxPairAddress, selectedChainID);
-  useErrorHandler(imxLendingPoolError);
+  showBoundary(imxLendingPoolError);
 
   // TODO: should use skeleton loaders
   if (selectedLendingPoolLoading) {

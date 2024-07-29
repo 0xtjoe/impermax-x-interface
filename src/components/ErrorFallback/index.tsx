@@ -21,7 +21,7 @@ const ErrorFallback = ({
       'text-impermaxCarnation',
       'space-x-1'
     )}>
-    <span>Error: {error.message}.</span>
+    <span>Error: {error ? error.message : 'Unexpected Error'}.</span>
     <span>
       Please&nbsp;
       <ImpermaxLink

@@ -7,7 +7,7 @@ import {
   useQueryClient
 } from 'react-query';
 import {
-  useErrorHandler,
+  // useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import { useWeb3React } from '@web3-react/core';
@@ -65,6 +65,7 @@ type StakingFormData = {
 }
 
 const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
+  // const { showBoundary } = useErrorBoundary();
   const {
     chainId,
     account,
@@ -95,7 +96,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     tokenAddress,
     account
   );
-  useErrorHandler(imxBalanceError);
+  console.log(imxBalanceError);
+  // showBoundary(imxBalanceError);
 
   const owner = account;
   const spender = chainId ? STAKING_ROUTER_ADDRESSES[chainId] : undefined;
@@ -122,7 +124,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
       enabled: !!(chainId && library && tokenAddress && owner && spender)
     }
   );
-  useErrorHandler(imxAllowanceError);
+  // showBoundary(imxAllowanceError);
 
   const approveMutation = useMutation<ContractReceipt, Error, string>(
     async () => {
@@ -146,7 +148,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
         addTransaction({
           hash: data.transactionHash
         }, {
-          summary: `Approve of IMX (${variables}) transfer.`
+          summary: `Approve of IBEX (${variables}) transfer.`
         });
         imxAllowanceRefetch();
       }
@@ -166,10 +168,10 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
         throw new Error('Invalid account!');
       }
       if (imxBalance === undefined) {
-        throw new Error('Invalid IMX balance!');
+        throw new Error('Invalid IBEX balance!');
       }
       if (imxAllowance === undefined) {
-        throw new Error('Invalid IMX allowance!');
+        throw new Error('Invalid IBEX allowance!');
       }
 
       const bigStakingAmount = parseUnits(variables);
@@ -182,14 +184,14 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
         addTransaction({
           hash: data.transactionHash
         }, {
-          summary: `Stake IMX (${variables}).`
+          summary: `Stake IBEX (${variables}).`
         });
         reset({
           [STAKING_AMOUNT]: ''
         });
         imxAllowanceRefetch();
         // Invalidations for Staked Balance & Unstaked Balance & Earned
-        // Invalidations for Staking APY & Total IMX Staked & Total IMX Distributed
+        // Invalidations for Staking APY & Total IMX Staked & Total IBEX Distributed
         imxBalanceRefetch();
         // TODO: could be abstracted
         const xIMXTokenAddress = chainId ? X_IMX_ADDRESSES[chainId] : undefined;
@@ -229,15 +231,15 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
 
   const validateForm = (value: string): string | undefined => {
     if (imxBalance === undefined) {
-      throw new Error('Invalid IMX balance!');
+      throw new Error('Invalid IBEX balance!');
     }
     if (imxAllowance === undefined) {
-      throw new Error('Invalid IMX allowance!');
+      throw new Error('Invalid IBEX allowance!');
     }
 
     const bigStakingAmount = parseUnits(value);
     if (bigStakingAmount.gt(imxBalance)) {
-      return 'Staking amount must be less than your IMX balance!';
+      return 'Staking amount must be less than your IBEX balance!';
     }
 
     if (imxAllowance.gt(Zero) && bigStakingAmount.gt(imxAllowance)) {
@@ -257,10 +259,10 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   let submitButtonText: string | undefined;
   if (imxBalanceSuccess && imxAllowanceSuccess) {
     if (imxBalance === undefined) {
-      throw new Error('Invalid IMX balance!');
+      throw new Error('Invalid IBEX balance!');
     }
     if (imxAllowance === undefined) {
-      throw new Error('Invalid IMX allowance!');
+      throw new Error('Invalid IBEX allowance!');
     }
 
     approved = imxAllowance.gt(Zero);
@@ -268,6 +270,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     floatIMXBalance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(imxBalance, IMX_DECIMALS)));
     floatIMXAllowance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(imxAllowance, IMX_DECIMALS)));
   }
+
   if (imxBalanceIdle || imxBalanceLoading || imxAllowanceIdle || imxAllowanceLoading) {
     submitButtonText = 'Loading...';
   }
@@ -291,7 +294,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
         {...props}>
         <TokenAmountLabel
           htmlFor={STAKING_AMOUNT}
-          text='Stake IMX' />
+          text='Stake IBEX' />
         <TokenAmountField
           id={STAKING_AMOUNT}
           {...register(STAKING_AMOUNT, {
@@ -306,7 +309,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
           allowance={floatIMXAllowance}
           error={!!errors[STAKING_AMOUNT]}
           helperText={errors[STAKING_AMOUNT]?.message}
-          tokenSymbol='IMX'
+          tokenSymbol='IBEX'
           walletActive={active}
           disabled={!imxAllowance || !imxBalance} />
         {active ? (

@@ -1,8 +1,10 @@
+/** @type {import('tailwindcss').Config} */
+
 
 const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
 
-const { BREAKPOINTS } = require('./utils/constants/styles');
+const { BREAKPOINTS } = require('./src/utils/constants/styles');
 
 const IMPERMAX_BLACK_HAZE = Object.freeze({
   50: '#ffffff',
@@ -162,11 +164,10 @@ const IMPERMAX_MILANO_RED = Object.freeze({
 });
 
 module.exports = {
-  purge: [
+  content: [
     './src/**/*.{js,jsx,ts,tsx}',
     './public/index.html'
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     screens: BREAKPOINTS,
     extend: {
@@ -405,5 +406,5 @@ module.exports = {
         });
       });
     })
-  ]
-};
+  ],
+}

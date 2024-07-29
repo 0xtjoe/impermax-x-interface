@@ -193,8 +193,9 @@ const CHAIN_LABELS: { [chainId: number]: string } = {
 };
 
 const SUPPORTED_CHAIN_IDS = [
-  CHAIN_IDS.ETHEREUM_MAIN_NET,
-  CHAIN_IDS.ROPSTEN
+  // CHAIN_IDS.ETHEREUM_MAIN_NET,
+  // CHAIN_IDS.ROPSTEN
+  CHAIN_IDS.ARBITRUM
 ];
 
 const SUPPORTED_CHAINS: Array<SupportedChain> = SUPPORTED_CHAIN_IDS.map(supportedChainId => ({

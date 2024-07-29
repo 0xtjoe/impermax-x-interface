@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Placement } from '@popperjs/core';
 import { usePopper } from 'react-popper';
-import Portal from '@reach/portal';
+import { Portal } from '@reach/portal';
 import useInterval from 'use-interval';
 import './index.scss';
 

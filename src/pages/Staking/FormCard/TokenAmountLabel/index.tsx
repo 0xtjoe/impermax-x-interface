@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import {
-  useErrorHandler,
+  // useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import { useWeb3React } from '@web3-react/core';
@@ -18,24 +18,6 @@ import xIMXDataFetcher, {
   X_IMX_DATA_FETCHER
 } from 'services/fetchers/x-imx-data-fetcher';
 
-// TODO: not used for now
-// import { formatUnits } from '@ethersproject/units';
-// import { BigNumber } from '@ethersproject/bignumber';
-// import { Contract } from '@ethersproject/contracts';
-// import {
-//   X_IMX_ADDRESSES,
-//   X_IMX_DECIMALS
-// } from 'config/web3/contracts/x-imxes';
-// import STATUSES from 'utils/constants/statuses';
-// import PoolTokenJSON from 'abis/contracts/IPoolToken.json';
-// const getXIMXContract = (xIMXAddress: string, library: Web3Provider) => {
-//   return new Contract(xIMXAddress, PoolTokenJSON.abi, library);
-// };
-// const xIMXContract = getXIMXContract(X_IMX_ADDRESSES[chainId], library);
-// const bigXIMXRate: BigNumber = await mounted(xIMXContract.callStatic.exchangeRate());
-// const floatXIMXRate = parseFloat(formatUnits(bigXIMXRate, X_IMX_DECIMALS));
-// const xIMXRate = formatNumberWithFixedDecimals(6)(floatXIMXRate);
-
 interface CustomProps {
   text: string;
 }
@@ -45,6 +27,7 @@ const TokenAmountLabel = ({
   className,
   ...rest
 }: CustomProps & Omit<React.ComponentPropsWithRef<'label'>, 'children'>): JSX.Element => {
+  // const { showBoundary } = useErrorBoundary();
   const {
     chainId = CHAIN_IDS.ETHEREUM_MAIN_NET
   } = useWeb3React<Web3Provider>();
@@ -63,7 +46,7 @@ const TokenAmountLabel = ({
       enabled: chainId !== undefined
     }
   );
-  useErrorHandler(xIMXDataError);
+  // showBoundary(xIMXDataError);
 
   let xIMXRateLabel: string | number = '-';
   if (xIMXDataLoading) {
@@ -93,7 +76,7 @@ const TokenAmountLabel = ({
         )}>
         {text}
       </span>
-      <ImpermaxJadeBadge>1 xIMX = {xIMXRateLabel} IMX</ImpermaxJadeBadge>
+      <ImpermaxJadeBadge>1 xIBEX = {xIMXRateLabel} IBEX</ImpermaxJadeBadge>
     </label>
   );
 };

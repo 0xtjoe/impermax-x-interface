@@ -1,7 +1,7 @@
 
 import { useMedia } from 'react-use';
 import {
-  useErrorHandler,
+  useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 
@@ -23,6 +23,7 @@ interface Props {
 const LendingPoolList = ({
   chainID
 }: Props): JSX.Element => {
+  const { showBoundary } = useErrorBoundary();
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
 
   const {
@@ -30,7 +31,7 @@ const LendingPoolList = ({
     data: lendingPools,
     error: lendingPoolsError
   } = useLendingPools(chainID);
-  useErrorHandler(lendingPoolsError);
+  showBoundary(lendingPoolsError);
 
   // TODO: should use skeleton loaders
   if (lendingPoolsLoading) {

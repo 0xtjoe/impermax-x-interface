@@ -1,14 +1,13 @@
-
+import { Listbox } from '@headlessui/react';
 import {
   useParams,
   useHistory
 } from 'react-router-dom';
 import clsx from 'clsx';
 
-import Select, {
+import {
   SelectButton,
   SelectOptions,
-  SelectOption,
   SelectBody,
   SelectCheck,
   SelectText
@@ -44,7 +43,7 @@ const ChainSelect = ({
   };
 
   return (
-    <Select
+    <Listbox
       value={value}
       onChange={handleChange}>
       {({ open }) => (
@@ -75,7 +74,7 @@ const ChainSelect = ({
           </SelectButton>
           <SelectOptions open={open}>
             {SUPPORTED_CHAINS.map(chain => (
-              <SelectOption
+              <Listbox.Option
                 key={chain.id}
                 value={chain}>
                 {({
@@ -107,12 +106,12 @@ const ChainSelect = ({
                     ) : null}
                   </>
                 )}
-              </SelectOption>
+              </Listbox.Option>
             ))}
           </SelectOptions>
         </SelectBody>
       )}
-    </Select>
+    </Listbox>
   );
 };
 

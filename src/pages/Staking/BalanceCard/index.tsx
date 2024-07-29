@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
 import {
-  useErrorHandler,
+  // useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import { useQuery } from 'react-query';
@@ -72,6 +72,7 @@ const BalanceCard = ({
   className,
   ...rest
 }: PanelProps): JSX.Element => {
+  // const { showBoundary } = useErrorBoundary();
   const {
     chainId,
     library,
@@ -90,7 +91,7 @@ const BalanceCard = ({
     imxTokenAddress,
     account
   );
-  useErrorHandler(imxBalanceError);
+  // // showBoundary(imxBalanceError);
 
   const xIMXTokenAddress = chainId ? X_IMX_ADDRESSES[chainId] : undefined;
   const {
@@ -103,7 +104,7 @@ const BalanceCard = ({
     xIMXTokenAddress,
     account
   );
-  useErrorHandler(xIMXBalanceError);
+  // // showBoundary(xIMXBalanceError);
 
   const {
     isLoading: xIMXDataLoading,
@@ -119,7 +120,7 @@ const BalanceCard = ({
       enabled: chainId !== undefined
     }
   );
-  useErrorHandler(xIMXDataError);
+  // // showBoundary(xIMXDataError);
 
   const {
     isLoading: stakingUserDataLoading,
@@ -136,7 +137,7 @@ const BalanceCard = ({
       enabled: chainId !== undefined && account !== undefined
     }
   );
-  useErrorHandler(stakingUserDataError);
+  // // showBoundary(stakingUserDataError);
 
   let stakedBalanceLabel;
   let unstakedBalanceLabel;
@@ -181,9 +182,9 @@ const BalanceCard = ({
       }
 
       const xIMXRate = parseFloat(xIMXData.exchangeRate);
-      const totalEarned = parseFloat(stakingUserData?.totalEarned ?? 0);
-      const anotherXIMXBalance = parseFloat(stakingUserData?.ximxBalance ?? 0);
-      const lastExchangeRate = parseFloat(stakingUserData?.lastExchangeRate ?? 0);
+      const totalEarned = parseFloat(stakingUserData?.totalEarned ?? '0');
+      const anotherXIMXBalance = parseFloat(stakingUserData?.ximxBalance ?? '0');
+      const lastExchangeRate = parseFloat(stakingUserData?.lastExchangeRate ?? '0');
       earnedLabel = totalEarned + anotherXIMXBalance * (xIMXRate - lastExchangeRate);
       earnedLabel = formatNumberWithFixedDecimals(2)(earnedLabel);
       earnedLabel = formatNumberWithComma(earnedLabel);
@@ -207,15 +208,15 @@ const BalanceCard = ({
       <BalanceItem
         label='Staked Balance'
         value={stakedBalanceLabel}
-        tokenSymbol='IMX' />
+        tokenSymbol='IBEX' />
       <BalanceItem
         label='Unstaked Balance'
         value={unstakedBalanceLabel}
-        tokenSymbol='IMX' />
+        tokenSymbol='IBEX' />
       <BalanceItem
         label='Earned'
         value={earnedLabel}
-        tokenSymbol='IMX' />
+        tokenSymbol='IBEX' />
     </Panel>
   );
 };
