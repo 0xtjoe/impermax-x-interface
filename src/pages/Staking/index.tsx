@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 
 import Layout from 'parts/Layout';
 import Information from './Information';
@@ -28,41 +30,50 @@ const InternalContainer = ({
   </div>
 );
 
-const Staking = (): JSX.Element => (
-  <Layout>
-    <div
-      className={clsx(
-        'space-y-6',
-        'max-w-6xl',
-        'mx-auto',
-        'my-4'
-      )}>
-      <InternalContainer>
-        <Information
-          className={clsx(
-            'max-w-xl',
-            'flex-grow'
-          )} />
-        <APYCard
-          className={clsx(
-            'flex-shrink-0',
-            MD_WIDTH_72_CLASS
-          )} />
-      </InternalContainer>
-      <InternalContainer>
-        <FormCard
-          className={clsx(
-            'max-w-xl',
-            'flex-grow'
-          )} />
-        <BalanceCard
-          className={clsx(
-            'flex-shrink-0',
-            MD_WIDTH_72_CLASS
-          )} />
-      </InternalContainer>
-    </div>
-  </Layout>
-);
+const Staking = () => {
+  const {
+    chainId
+  } = useWeb3React<Web3Provider>();
+
+  return (
+    <Layout>
+      <div
+        className={clsx(
+          'space-y-6',
+          'max-w-6xl',
+          'mx-auto',
+          'my-4'
+        )}>
+        <InternalContainer>
+          <Information
+            className={clsx(
+              'max-w-xl',
+              'flex-grow'
+            )} />
+          <APYCard
+            className={clsx(
+              'flex-shrink-0',
+              MD_WIDTH_72_CLASS
+            )} />
+        </InternalContainer>
+        {
+          chainId &&
+          <InternalContainer>
+            <FormCard
+              className={clsx(
+                'max-w-xl',
+                'flex-grow'
+              )} />
+            <BalanceCard
+              className={clsx(
+                'flex-shrink-0',
+                MD_WIDTH_72_CLASS
+              )} />
+          </InternalContainer>
+        }
+      </div>
+    </Layout>
+  );
+};
 
 export default Staking;

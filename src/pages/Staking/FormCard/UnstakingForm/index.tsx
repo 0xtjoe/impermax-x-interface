@@ -7,7 +7,7 @@ import {
   useQueryClient
 } from 'react-query';
 import {
-  useErrorHandler,
+  useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import { useWeb3React } from '@web3-react/core';
@@ -65,6 +65,7 @@ type UnstakingFormData = {
 }
 
 const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
+  const { showBoundary } = useErrorBoundary();
   const {
     chainId,
     account,
@@ -95,7 +96,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     tokenAddress,
     account
   );
-  useErrorHandler(xIMXBalanceError);
+  showBoundary(xIMXBalanceError);
 
   const owner = account;
   const spender = chainId ? STAKING_ROUTER_ADDRESSES[chainId] : undefined;
@@ -122,7 +123,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
       enabled: !!(chainId && library && tokenAddress && owner && spender)
     }
   );
-  useErrorHandler(xIMXAllowanceError);
+  showBoundary(xIMXAllowanceError);
 
   const approveMutation = useMutation<ContractReceipt, Error, string>(
     async () => {
@@ -146,7 +147,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         addTransaction({
           hash: data.transactionHash
         }, {
-          summary: `Approve of xIMX (${variables}) transfer.`
+          summary: `Approve of xIBEX (${variables}) transfer.`
         });
         xIMXAllowanceRefetch();
       }
@@ -166,10 +167,10 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         throw new Error('Invalid account!');
       }
       if (xIMXAllowance === undefined) {
-        throw new Error('Invalid xIMX allowance!');
+        throw new Error('Invalid xIBEX allowance!');
       }
       if (xIMXBalance === undefined) {
-        throw new Error('Invalid xIMX balance!');
+        throw new Error('Invalid xIBEX balance!');
       }
 
       const bigUnstakingAmount = parseUnits(variables);
@@ -182,14 +183,14 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         addTransaction({
           hash: data.transactionHash
         }, {
-          summary: `Unstake IMX (${variables}).`
+          summary: `Unstake IBEX (${variables}).`
         });
         reset({
           [UNSTAKING_AMOUNT]: ''
         });
         xIMXAllowanceRefetch();
         // Invalidations for Staked Balance & Unstaked Balance & Earned
-        // Invalidations for Staking APY & Total IMX Staked & Total IMX Distributed
+        // Invalidations for Staking APY & Total IMX Staked & Total IBEX Distributed
         xIMXBalanceRefetch();
         // TODO: could be abstracted
         const imxTokenAddress = chainId ? IMX_ADDRESSES[chainId] : undefined;
@@ -229,15 +230,15 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
 
   const validateForm = (value: string): string | undefined => {
     if (xIMXAllowance === undefined) {
-      throw new Error('Invalid xIMX allowance!');
+      throw new Error('Invalid xIBEX allowance!');
     }
     if (xIMXBalance === undefined) {
-      throw new Error('Invalid xIMX balance!');
+      throw new Error('Invalid xIBEX balance!');
     }
 
     const bigUnstakingAmount = parseUnits(value);
     if (bigUnstakingAmount.gt(xIMXBalance)) {
-      return 'Unstaking amount must be less than your xIMX balance!';
+      return 'Unstaking amount must be less than your xIBEX balance!';
     }
 
     if (xIMXAllowance.gt(Zero) && bigUnstakingAmount.gt(xIMXAllowance)) {
@@ -257,10 +258,10 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
   let submitButtonText: string | undefined;
   if (xIMXBalanceSuccess && xIMXAllowanceSuccess) {
     if (xIMXAllowance === undefined) {
-      throw new Error('Invalid xIMX allowance!');
+      throw new Error('Invalid xIBEX allowance!');
     }
     if (xIMXBalance === undefined) {
-      throw new Error('Invalid xIMX balance!');
+      throw new Error('Invalid xIBEX balance!');
     }
 
     approved = xIMXAllowance.gt(Zero);
@@ -291,7 +292,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         {...props}>
         <TokenAmountLabel
           htmlFor={UNSTAKING_AMOUNT}
-          text='Unstake IMX' />
+          text='Unstake IBEX' />
         <TokenAmountField
           id={UNSTAKING_AMOUNT}
           {...register(UNSTAKING_AMOUNT, {
@@ -306,7 +307,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
           allowance={floatXIMXAllowance}
           error={!!errors[UNSTAKING_AMOUNT]}
           helperText={errors[UNSTAKING_AMOUNT]?.message}
-          tokenSymbol='xIMX'
+          tokenSymbol='xIBEX'
           walletActive={active}
           disabled={!xIMXAllowance || !xIMXBalance} />
         {active ? (

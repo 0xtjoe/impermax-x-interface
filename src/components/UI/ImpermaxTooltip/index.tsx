@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import Tooltip, { TooltipProps } from '@reach/tooltip';
+import { Tooltip, TooltipProps } from '@reach/tooltip';
 import clsx from 'clsx';
 import '@reach/tooltip/styles.css';
 

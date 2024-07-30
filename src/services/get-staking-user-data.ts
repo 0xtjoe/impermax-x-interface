@@ -13,7 +13,7 @@ interface StakingUserData {
 const getStakingUserData = async (chainID: number, account: string): Promise<StakingUserData> => {
   const query = gql`{
     user(id: "${account.toLowerCase()}") {
-      ximxBalance
+      xibexBalance
       lastExchangeRate
       totalEarned
     }

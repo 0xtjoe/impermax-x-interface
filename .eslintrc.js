@@ -36,12 +36,13 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 0,
     // MEMO: inspired by https://github.com/typescript-eslint/typescript-eslint/issues/2621#issuecomment-701970389
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      2,
-      {
-        argsIgnorePattern: '^_'
-      }
-    ],
+    '@typescript-eslint/no-unused-vars': 'off',
+    // '@typescript-eslint/no-unused-vars': [
+    //   2,
+    //   {
+    //     argsIgnorePattern: '^_'
+    //   }
+    // ],
 
     // JS ESLinting rules
     'comma-dangle': [

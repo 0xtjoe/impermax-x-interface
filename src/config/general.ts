@@ -1,5 +1,5 @@
 
-const IS_STAKING_APP = false;
+const IS_STAKING_APP = true;
 
 const UI_MARGIN = 1.1;
 const DUST = 1.000001;

@@ -19,7 +19,7 @@ const Information = ({
         'font-medium',
         'text-lg'
       )}>
-      How does IMX staking work?
+      How does IBEX staking work?
     </h2>
     <p
       className={clsx(
@@ -29,12 +29,12 @@ const Information = ({
       )}>
       {`
         Up to 20% of all the interests paid on Impermax are kept by the protocol as profit
-         and used to buy back IMX from the market.
-         These tokens are then distributed among IMX stakers
+         and used to buy back IBEX from the market.
+         These tokens are then distributed among IBEX stakers
          proportionally to their share of the pool.
-         By staking IMX you receive an xIMX token that will continuously compound staking profits.
+         By staking IBEX you receive an xIBEX token that will continuously compound staking profits.
          You can unstake at any moment
-         in order to receive all the originally deposited IMX and any additional staking profit.
+         in order to receive all the originally deposited IBEX and any additional staking profit.
       `}
       <ImpermaxLink
         href='https://impermax.medium.com/introducing-imx-staking-281e7b7b54c'

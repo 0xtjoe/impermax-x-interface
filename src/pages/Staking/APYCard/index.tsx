@@ -1,6 +1,5 @@
-
 import {
-  useErrorHandler,
+  // useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import { useWeb3React } from '@web3-react/core';
@@ -20,27 +19,6 @@ import reservesDistributorDataFetcher, {
   ReservesDistributorData,
   RESERVES_DISTRIBUTOR_DATA_FETCHER
 } from 'services/fetchers/reserves-distributor-data-fetcher';
-
-// TODO: not used for now
-// import { formatUnits } from '@ethersproject/units';
-// import { Contract } from '@ethersproject/contracts';
-// import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
-// import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
-// import { RESERVES_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/reserves-distributors';
-// import ReservesDistributorJSON from 'abis/contracts/IReservesDistributor.json';
-// import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
-// const getXIMXAPY = async (chainID: number, library: Web3Provider) => {
-//   const imxContract = getERC20Contract(IMX_ADDRESSES[chainID], library);
-//   const bigReservesDistributorBalance = await imxContract.balanceOf(RESERVES_DISTRIBUTOR_ADDRESSES[chainID]);
-//   const reservesDistributorBalance = parseFloat(formatUnits(bigReservesDistributorBalance));
-//   const bigXImxBalance = await imxContract.balanceOf(X_IMX_ADDRESSES[chainID]);
-//   const xImxBalance = parseFloat(formatUnits(bigXImxBalance));
-//   const reservesDistributorContract =
-//     new Contract(RESERVES_DISTRIBUTOR_ADDRESSES[chainID], ReservesDistributorJSON.abi, library);
-//   const periodLength = await reservesDistributorContract.periodLength();
-//   const dailyAPR = reservesDistributorBalance / periodLength * 3600 * 24 / xImxBalance;
-//   return Math.pow(1 + dailyAPR, 365) - 1;
-// };
 
 const Term = ({
   className,
@@ -70,9 +48,10 @@ const Description = ({
 const APYCard = ({
   className,
   ...rest
-}: React.ComponentPropsWithRef<'dl'>): JSX.Element => {
+}: React.ComponentPropsWithRef<'dl'>) => {
+  // const { showBoundary } = useErrorBoundary();
   const {
-    chainId = CHAIN_IDS.ETHEREUM_MAIN_NET
+    chainId = CHAIN_IDS.ARBITRUM
   } = useWeb3React<Web3Provider>();
 
   const {
@@ -90,7 +69,7 @@ const APYCard = ({
       refetchInterval: 10000
     }
   );
-  useErrorHandler(xIMXDataError);
+  // showBoundary(xIMXDataError);
 
   const {
     isLoading: reservesDistributorDataLoading,
@@ -107,7 +86,7 @@ const APYCard = ({
       refetchInterval: 10000
     }
   );
-  useErrorHandler(reservesDistributorDataError);
+  // showBoundary(reservesDistributorDataError);
 
   let stakingAPYLabel: string | number = '-';
   let totalIMXStakedLabel: string | number = '-';
@@ -159,13 +138,13 @@ const APYCard = ({
         {stakingAPYLabel}
       </Description>
       <Term className='mt-2'>
-        Total IMX Staked
+        Total IBEX Staked
       </Term>
       <Description>
         {totalIMXStakedLabel}
       </Description>
       <Term className='mt-2'>
-        Total IMX Distributed
+        Total IBEX Distributed
       </Term>
       <Description>
         {totalIMXDistributedLabel}

@@ -1,6 +1,6 @@
 
 import {
-  useErrorHandler,
+  useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 import { useQuery } from 'react-query';
@@ -19,6 +19,8 @@ interface Props {
 const OverallStats = ({
   chainID
 }: Props): JSX.Element => {
+  const { showBoundary } = useErrorBoundary();
+
   const {
     isLoading: tvlDataLoading,
     data: tvlData,
@@ -30,7 +32,7 @@ const OverallStats = ({
     ],
     tvlDataFetcher
   );
-  useErrorHandler(tvlDataError);
+  showBoundary(tvlDataError);
 
   // TODO: should use skeleton loaders
   if (tvlDataLoading) {

@@ -91,8 +91,7 @@ type SelectOptionsProps = CustomSelectOptionsProps & Props<typeof Listbox.Option
 
 const SelectOptions = ({
   open,
-  className,
-  ...rest
+  className
 }: SelectOptionsProps): JSX.Element => (
   <Transition
     show={open}
@@ -124,8 +123,8 @@ const SelectOptions = ({
         'focus:outline-none',
         'sm:text-sm',
         className
-      )}
-      {...rest} />
+      )} />
+    {/* {...rest} /> */}
   </Transition>
 );
 

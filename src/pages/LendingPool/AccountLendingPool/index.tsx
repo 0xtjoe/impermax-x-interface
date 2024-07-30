@@ -11,7 +11,7 @@ import { AddressZero } from '@ethersproject/constants';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
-  useErrorHandler,
+  useErrorBoundary,
   withErrorBoundary
 } from 'react-error-boundary';
 
@@ -72,6 +72,7 @@ const AccountLendingPoolContainer = ({ children }: AccountLendingPoolContainerPr
  */
 
 const AccountLendingPool = (): JSX.Element => {
+  const { showBoundary } = useErrorBoundary();
   const {
     [PARAMETERS.CHAIN_ID]: selectedChainIDParam,
     [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: selectedUniswapV2PairAddress
@@ -83,7 +84,7 @@ const AccountLendingPool = (): JSX.Element => {
     data: selectedLendingPool,
     error: selectedLendingPoolError
   } = useLendingPool(selectedUniswapV2PairAddress, selectedChainID);
-  useErrorHandler(selectedLendingPoolError);
+  showBoundary(selectedLendingPoolError);
 
   const {
     library,
@@ -102,7 +103,8 @@ const AccountLendingPool = (): JSX.Element => {
     library,
     account
   );
-  useErrorHandler(tokenADepositedError);
+  showBoundary(tokenADepositedError);
+
   const {
     isLoading: tokenBDepositedLoading,
     data: tokenBDeposited,
@@ -114,7 +116,7 @@ const AccountLendingPool = (): JSX.Element => {
     library,
     account
   );
-  useErrorHandler(tokenBDepositedError);
+  showBoundary(tokenBDepositedError);
 
   const [pageSelected, setPageSelected] = React.useState<AccountLendingPoolPage>(AccountLendingPoolPage.Uninitialized);
 
@@ -129,7 +131,7 @@ const AccountLendingPool = (): JSX.Element => {
     library,
     account
   );
-  useErrorHandler(collateralDepositedError);
+  showBoundary(collateralDepositedError);
 
   const {
     isLoading: tokenABorrowBalanceLoading,
@@ -142,7 +144,7 @@ const AccountLendingPool = (): JSX.Element => {
     library,
     account
   );
-  useErrorHandler(tokenABorrowBalanceError);
+  showBoundary(tokenABorrowBalanceError);
   const {
     isLoading: tokenBBorrowBalanceLoading,
     data: tokenBBorrowBalance,
@@ -154,7 +156,7 @@ const AccountLendingPool = (): JSX.Element => {
     library,
     account
   );
-  useErrorHandler(tokenBBorrowBalanceError);
+  showBoundary(tokenBBorrowBalanceError);
 
   const {
     isLoading: priceObjLoading,
@@ -180,7 +182,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library
     }
   );
-  useErrorHandler(priceObjLoadingError);
+  showBoundary(priceObjLoadingError);
 
   const {
     isLoading: priceDenomLPLoading,
@@ -191,7 +193,7 @@ const AccountLendingPool = (): JSX.Element => {
     selectedChainID,
     library
   );
-  useErrorHandler(priceDenomLPError);
+  showBoundary(priceDenomLPError);
 
   const {
     isLoading: reservesLoading,
@@ -211,7 +213,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library
     }
   );
-  useErrorHandler(reservesError);
+  showBoundary(reservesError);
 
   const {
     isLoading: bigTotalSupplyLoading,
@@ -231,7 +233,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library
     }
   );
-  useErrorHandler(bigTotalSupplyError);
+  showBoundary(bigTotalSupplyError);
 
   const {
     isLoading: farmingPoolAddressesLoading,
@@ -241,7 +243,7 @@ const AccountLendingPool = (): JSX.Element => {
     },
     error: farmingPoolAddressesError
   } = useFarmingPoolAddresses(selectedChainID, selectedUniswapV2PairAddress, library);
-  useErrorHandler(farmingPoolAddressesError);
+  showBoundary(farmingPoolAddressesError);
   const {
     isLoading: farmingPoolARecipientsLoading,
     data: farmingPoolARecipients = [Zero],
@@ -261,7 +263,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library && AddressZero !== farmingPoolAAddress
     }
   );
-  useErrorHandler(farmingPoolARecipientsError);
+  showBoundary(farmingPoolARecipientsError);
   const {
     isLoading: farmingPoolBRecipientsLoading,
     data: farmingPoolBRecipients = [Zero],
@@ -281,7 +283,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library && AddressZero !== farmingPoolBAddress
     }
   );
-  useErrorHandler(farmingPoolBRecipientsError);
+  showBoundary(farmingPoolBRecipientsError);
 
   const {
     isLoading: farmingPoolATotalAmountLoading,
@@ -301,7 +303,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library && AddressZero !== farmingPoolAAddress
     }
   );
-  useErrorHandler(farmingPoolATotalAmountError);
+  showBoundary(farmingPoolATotalAmountError);
   const {
     isLoading: farmingPoolBTotalAmountLoading,
     data: farmingPoolBTotalAmount = Zero,
@@ -320,7 +322,7 @@ const AccountLendingPool = (): JSX.Element => {
       enabled: !!library && AddressZero !== farmingPoolAAddress
     }
   );
-  useErrorHandler(farmingPoolBTotalAmountError);
+  showBoundary(farmingPoolBTotalAmountError);
 
   const {
     isLoading: claimALogsLoading,
@@ -346,7 +348,7 @@ const AccountLendingPool = (): JSX.Element => {
         AddressZero !== farmingPoolAAddress
     }
   );
-  useErrorHandler(claimALogsError);
+  showBoundary(claimALogsError);
   const {
     isLoading: claimBLogsLoading,
     data: claimBLogs,
@@ -371,7 +373,7 @@ const AccountLendingPool = (): JSX.Element => {
         AddressZero !== farmingPoolBAddress
     }
   );
-  useErrorHandler(claimBLogsError);
+  showBoundary(claimBLogsError);
 
   if (!account) {
     return (
